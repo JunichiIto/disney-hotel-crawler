@@ -31,5 +31,22 @@ class HotelPlanTest < ActiveSupport::TestCase
         HotelPlan.fetch_hotel_plan
       end
     end
+
+    # 1件だけ削除する
+    plan_name = '【小学生を含む4名様限定♪】ベッドが1名分少ないけどお得！お日にち限定♪朝食付'
+    room_name = '【小学生を含む4名様限定】スタンダード※ベッド3台 (25㎡)禁煙'
+    HotelPlan.find_by!(plan_name: plan_name, room_name: room_name).destroy
+
+    # 新規プランが1件でも見つかれば、メールを送信する
+    VCR.use_cassette('fetch_hotel_plan') do
+      assert_difference ->{ HotelPlan.count } => 1, ->{ ActionMailer::Base.deliveries.size } => 1 do
+        HotelPlan.fetch_hotel_plan
+      end
+    end
+
+    mail = ActionMailer::Base.deliveries.last
+    plan_name = '【小学生を含む4名様限定♪】ベッドが1名分少ないけどお得！お日にち限定♪朝食付 | 【小学生を含む4名様限定】スタンダード※ベッド3台 (25㎡)禁煙'
+    assert_includes mail.body, plan_name
+    assert_includes mail.body, "74700円"
   end
 end
