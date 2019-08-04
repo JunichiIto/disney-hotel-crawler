@@ -1,4 +1,6 @@
 class HotelPlan < ApplicationRecord
+  TARGET_URL = 'https://asp.hotel-story.ne.jp/ver3d/planlist.asp?hcod1=00020&hcod2=001&hidmode=select&mode=seek&hidSELECTARRYMD=2019%2F08%2F12&hidSELECTHAKSU=2&hidSELECTadult=4&room=1&obj_ga=2.146060855.2096339239.1564882699-1444074251.1558508852&_ga=2.208041233.2096339239.1564882699-1444074251.1558508852'.freeze
+
   validates :plan_name, presence: true
   validates :room_name, presence: true, uniqueness: { scope: :plan_name }
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -6,10 +8,9 @@ class HotelPlan < ApplicationRecord
   class << self
     def fetch_hotel_plan
       logger.info "[INFO] Start fetch_hotel_plan"
-      url = 'https://asp.hotel-story.ne.jp/ver3d/planlist.asp?hcod1=00020&hcod2=001&hidmode=select&mode=seek&hidSELECTARRYMD=2019%2F08%2F12&hidSELECTHAKSU=2&hidSELECTadult=4&room=1&obj_ga=2.146060855.2096339239.1564882699-1444074251.1558508852&_ga=2.208041233.2096339239.1564882699-1444074251.1558508852'
 
       agent = Mechanize.new
-      page = agent.get(url)
+      page = agent.get(TARGET_URL)
 
       new_plans = []
       page.search(".plan-list").each do |el|
