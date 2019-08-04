@@ -5,6 +5,7 @@ class HotelPlan < ApplicationRecord
 
   class << self
     def fetch_hotel_plan
+      logger.info "[INFO] Start fetch_hotel_plan"
       url = 'https://asp.hotel-story.ne.jp/ver3d/planlist.asp?hcod1=00020&hcod2=001&hidmode=select&mode=seek&hidSELECTARRYMD=2019%2F08%2F12&hidSELECTHAKSU=2&hidSELECTadult=4&room=1&obj_ga=2.146060855.2096339239.1564882699-1444074251.1558508852&_ga=2.208041233.2096339239.1564882699-1444074251.1558508852'
 
       agent = Mechanize.new
@@ -31,8 +32,10 @@ class HotelPlan < ApplicationRecord
         end
       end
       if new_plans.size > 0
+        logger.info "[INFO] Send notification"
         HotelPlanMailer.notification(new_plans).deliver_now
       end
+      logger.info "[INFO] Complete fetch_hotel_plan"
     end
   end
 end
