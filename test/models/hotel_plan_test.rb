@@ -24,5 +24,12 @@ class HotelPlanTest < ActiveSupport::TestCase
     plan_name = '【小学生を含む4名様限定♪】ベッドが1名分少ないけどお得！Baby’s ＆Kiddy Sweet★お日にち限定♪素泊り | 【小学生を含む4名様限定】【Kiddy Sweet】エクレール (25㎡)'
     assert_includes mail.body, plan_name
     assert_includes mail.body, "65100円"
+
+    # すでに取込み済みであればメールを送信しない
+    VCR.use_cassette('fetch_hotel_plan') do
+      assert_no_difference [->{ HotelPlan.count }, ->{ ActionMailer::Base.deliveries.size }] do
+        HotelPlan.fetch_hotel_plan
+      end
+    end
   end
 end

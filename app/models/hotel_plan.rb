@@ -30,7 +30,9 @@ class HotelPlan < ApplicationRecord
           end
         end
       end
-      HotelPlanMailer.notification(new_plans).deliver_now
+      if new_plans.size > 0
+        HotelPlanMailer.notification(new_plans).deliver_now
+      end
     end
   end
 end
