@@ -10,6 +10,7 @@ class HotelPlan < ApplicationRecord
       agent = Mechanize.new
       page = agent.get(url)
 
+      new_plans = []
       page.search(".plan-list").each do |el|
         plan_name = el.at('h3').text.squish
         table = el.at('.reserve_available')
@@ -19,10 +20,17 @@ class HotelPlan < ApplicationRecord
           price = row.at('.col03').text.squish
 
           record = self.find_or_initialize_by(plan_name: plan_name, room_name: room_name)
-          record.price = price.gsub(/[^\d]/, '').to_i
-          record.save!
+          if record.new_record?
+            record.price = price.gsub(/[^\d]/, '').to_i
+            record.save!
+
+            new_plans << record
+          else
+            logger.info "[INFO] Already saved."
+          end
         end
       end
+      HotelPlanMailer.notification(new_plans).deliver_now
     end
   end
 end

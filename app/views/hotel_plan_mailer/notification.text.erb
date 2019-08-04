@@ -1,0 +1,7 @@
+新しいプランが見つかりました。
+
+<% @hotel_plans.each do |plan| %>
+<%= plan.plan_name %> | <%= plan.room_name %>
+<%= plan.price %>円
+
+<% end %>
