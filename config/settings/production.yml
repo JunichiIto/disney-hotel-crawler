@@ -1,0 +1,3 @@
+mail:
+  from: <%= ENV['MAIL_FROM'] %>
+  to: <%= ENV['MAIL_TO'] %>
