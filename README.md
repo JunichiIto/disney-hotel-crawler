@@ -1,24 +1,26 @@
-# README
+# disney-hotel-crawler
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Sample app for [Ginza Rails #12](https://ginza-rails.connpass.com/event/139740/)
 
-Things you may want to cover:
+## Setup
 
-* Ruby version
+```
+bundle install
+rails db:migrate
+```
 
-* System dependencies
+## Run tests
 
-* Configuration
+```
+rails test
+```
 
-* Database creation
+## 免責事項 / Disclaimer
 
-* Database initialization
+このプログラムを直接利用、もしくは参考にしたプログラムで損害が発生しても、作者は一切 責任を負いません。
 
-* How to run the test suite
+The author will not be liable for any damages caused by the direct use or reference of this program.
 
-* Services (job queues, cache servers, search engines, etc.)
+## License
 
-* Deployment instructions
-
-* ...
+MIT License.
